@@ -30,6 +30,7 @@ public class GameSession : MonoBehaviour
     {
         if (playerLives > 1)
         {
+            StartCoroutine(FindObjectOfType<Player>().Halt());
             TakeLife();
         }
         else
@@ -52,7 +53,7 @@ public class GameSession : MonoBehaviour
         livesText.text = playerLives.ToString();
     }
 
-    private void ResetGameSession() //Ha az össze élet elfogy, vissza az elejére és singelton meghal (game és élet reset)
+    private void ResetGameSession() // Ha az össze élet elfogy, vissza az elejére és singelton meghal (game és élet reset)
     {
         SceneManager.LoadScene(0);
         Destroy(gameObject); 

@@ -7,9 +7,16 @@ public class Player : MonoBehaviour
 {
     // Config
     [SerializeField] float runSpeed = 6.5f;
-    [SerializeField] float jumpSpeed = 17f;
+    [SerializeField] float jumpVelocity = 17f;
     [SerializeField] float climbSpeed = 5f;
+    [SerializeField] float waitForRespawn = 0.8f;
     [SerializeField] Vector2 deathKick = new Vector2(0f, 15f);
+
+    [SerializeField] float fallMultiplier = 5f;
+    [SerializeField] float lowJumpMultiplier = 2f;
+
+
+    [SerializeField] AudioClip jumpSFX;
 
     // State
     bool isAlive = true;
@@ -20,11 +27,13 @@ public class Player : MonoBehaviour
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeet;
     float gravityScaleAtStart;
-
-    // Message then  methods
+    float flashSpeed = 0.3f;
+    SpriteRenderer mySprite;
+    // Message then methods
 
     void Start()
     {
+        mySprite = GetComponent<SpriteRenderer>();
         myRigidBody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         myBodyCollider = GetComponent<CapsuleCollider2D>();
@@ -32,15 +41,19 @@ public class Player : MonoBehaviour
         gravityScaleAtStart = myRigidBody.gravityScale;
     }
 
-    
+
     void Update()
     {
         if (!isAlive) { return; }
         Run();
         FlipSprite();
-        Jump();
+        JumpV2();
         ClimbLadder();
-        Die();  
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
+        {
+            mySprite.color = Color.Lerp(Color.white, Color.gray, flashSpeed);
+            StartCoroutine(Die());
+        }      
     }
 
     private void Run()
@@ -56,10 +69,14 @@ public class Player : MonoBehaviour
 
     private void ClimbLadder()
     {
-        if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        myRigidBody.gravityScale = gravityScaleAtStart;  
+        if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Climbing"))) //csak a létrán "máasszon" (else gravity = 0 és elrepül)
         {
             myAnimator.SetBool("Climbing", false);
-            myRigidBody.gravityScale = gravityScaleAtStart;
+            return;
+        }
+        if (myRigidBody.velocity.y > climbSpeed) //Tud ugrani, nem akad meg
+        {
             return;
         }
         float controlThrow = CrossPlatformInputManager.GetAxis("Vertical");
@@ -67,35 +84,53 @@ public class Player : MonoBehaviour
         myRigidBody.velocity = climbVelocity;
         myRigidBody.gravityScale = 0f;
 
-        bool playerHasVerticalSpeed = Mathf.Abs(myRigidBody.velocity.y) > Mathf.Epsilon;
+        bool playerHasVerticalSpeed = Mathf.Abs(myRigidBody.velocity.y) > Mathf.Epsilon; // mozog-e?
         myAnimator.SetBool("Climbing", playerHasVerticalSpeed);
+        JumpV2();
     }
 
-    
+    private void JumpV2()
+    {
+        if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) && !myFeet.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        {
+            return;
+        }
+        if (Input.GetButtonDown("Jump"))
+        {
+            myRigidBody.velocity = Vector2.up * jumpVelocity;
+        }
+        if (myRigidBody.velocity.y < 0)
+        {
+            myRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; //Ha nyomod, nagyot ugrik
+        }
+        else if (myRigidBody.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            myRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime; //Ha elengeded hamar az ugrást, kicsit ugrik
+        }
+    }
+    /*
     private void Jump()
     {
-
         if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             return;
         }
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
-            Vector2 jumpVelocityToAdd = new Vector2(1f, jumpSpeed);
+            Vector2 jumpVelocityToAdd = new Vector2(1f, jumpVelocity);
             myRigidBody.velocity += jumpVelocityToAdd; // BUG! néha double jump
             print(myRigidBody.velocity); //debug
-        }
+            AudioSource.PlayClipAtPoint(jumpSFX, transform.position);
+        }    
     }
-
-    private void Die()
+    */
+    IEnumerator Die()
     {
-        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
-        {
             myAnimator.SetTrigger("Dying");
             GetComponent<Rigidbody2D>().velocity = deathKick;
             isAlive = false;
+            yield return new WaitForSecondsRealtime(waitForRespawn);
             FindObjectOfType<GameSession>().ProcessPlayerDeath();
-        }
     }
 
 
@@ -106,5 +141,14 @@ public class Player : MonoBehaviour
         {
             transform.localScale = new Vector2(Mathf.Sign(myRigidBody.velocity.x), transform.localScale.y); //Megfordítja az x értékét, y = változatlan
         }
+    }
+
+    void DamageTaken() //Does nothing
+    {
+       
+    }
+    public IEnumerator Halt() // does nothing
+    {
+        yield return new WaitForSecondsRealtime(3);
     }
 }

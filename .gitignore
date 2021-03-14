@@ -9,6 +9,7 @@
 /TileVania/[Bb]uilds/
 /TileVania/[Ll]ogs/
 /TileVania/[Mm]emoryCaptures/
+/TileVania/[Aa]ssets/SPA/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 /TileVania/[Aa]ssets/**/*.meta
