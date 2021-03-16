@@ -20,7 +20,7 @@ TagManager:
   - Enemy
   - Hazards
   - Interactables
-  - 
+  - Projectile
   - 
   - 
   - 
@@ -58,6 +58,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2219717683
+    locked: 0
+  - name: Projectile
+    uniqueID: 636927007
     locked: 0
   - name: Foreground
     uniqueID: 397296621
