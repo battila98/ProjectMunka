@@ -43,7 +43,8 @@ public class Player : MonoBehaviour
         {
             mySprite.color = Color.Lerp(Color.white, Color.gray, flashSpeed);
             StartCoroutine(Die());
-        }      
+        }
+        movement.Shoot();
     }
 
     /*

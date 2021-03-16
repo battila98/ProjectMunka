@@ -23,10 +23,21 @@ public class Movement : MonoBehaviour
         gravityScaleAtStart = myRigidBody.gravityScale;
     }
 
+    public void Shoot() //BUG -> Nem jön ki az animációból
+    {
+        bool playerShooting = true;
+        if (Input.GetButton("Fire1"))
+        {
+            myAnimator.SetBool("Shooting", playerShooting);
+            playerShooting = false;
+            return;
+        }           
+    }
+
     public void Run()
     {
         float controlThrow = Input.GetAxis("Horizontal"); //-1 to +1
-        Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, myRigidBody.velocity.y); // ami a mostani sebességed y-on, az lesz a sebességed, azaz 0
+        Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, myRigidBody.velocity.y); // a mostani sebességed y-on, az lesz a sebességed, azaz 0
         myRigidBody.velocity = playerVelocity;
 
         //print(playerVelocity);
