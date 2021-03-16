@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System;
+using System.IO;
 
 public class GameSession : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class GameSession : MonoBehaviour
 
     [SerializeField] Text livesText;
     [SerializeField] Text scoreText;
+
+    string path = Environment.CurrentDirectory + "/Assets/Saves/";
+    private Stats stats;
+    private List<Achivement> achivements;
 
     private void Awake() //singelton patern = csak egy lehet, a másik meghal = nem resetel a játék
     {
@@ -25,12 +30,37 @@ public class GameSession : MonoBehaviour
             DontDestroyOnLoad(gameObject); // akkor az új sesson megmarad -> Ez lesz az első session, addig megy, amíg 3x meghal a játékos (ResetGameSession())
         }
     }
+    
+    private void Start()
+    {
+        //print(Environment.CurrentDirectory);
+        //ReadSaves();
+
+        stats = new Stats
+        {
+            PlayerName = "Név"
+        };
+        WriteSaves();
+        livesText.text = playerLives.ToString();
+        scoreText.text = score.ToString();
+    }
+
+    private void ReadSaves()
+    {
+        stats = JsonConvert.DeserializeObject<Stats>(path + "stats.json"); //beolvas
+        achivements = JsonConvert.DeserializeObject<List<Achivement>>(path + "achivements.json");
+    }
+
+    private void WriteSaves()
+    {
+        File.WriteAllText(path + "stats.json", JsonConvert.SerializeObject(stats));
+        File.WriteAllText(path + "achivements.json", JsonConvert.SerializeObject(achivements));
+    }
 
     public void ProcessPlayerDeath()
     {
         if (playerLives > 1)
         {
-            StartCoroutine(FindObjectOfType<Player>().Halt());
             TakeLife();
         }
         else
@@ -59,9 +89,4 @@ public class GameSession : MonoBehaviour
         Destroy(gameObject); 
     }
 
-    private void Start()
-    {
-        livesText.text = playerLives.ToString();
-        scoreText.text = score.ToString();
-    }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4771695414722136556}
   - component: {fileID: 436964090}
   - component: {fileID: 5883089215022997741}
+  - component: {fileID: 2074217721594382317}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -154,12 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4068a30333f2447468b8e091f7b5983d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 8
-  jumpSpeed: 17.4
-  climbSpeed: 5
+  waitForRespawn: 0.8
   deathKick: {x: 5, y: 15}
-  fallMultiplier: 1.1
-  lowJumpMultiplier: 1
   jumpSFX: {fileID: 8300000, guid: c48946d692813344a9d90d2051d49378, type: 3}
 --- !u!61 &5883089215022997741
 BoxCollider2D:
@@ -187,3 +184,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.49064636, y: 0.10479641}
   m_EdgeRadius: 0
+--- !u!114 &2074217721594382317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608330597408258391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e71d5de5e1cb36e45a2df41dbbd6cb4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runSpeed: 5.5
+  jumpVelocity: 17.5
+  climbSpeed: 5
+  fallMultiplier: 1.2
+  lowJumpMultiplier: 1
