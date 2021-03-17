@@ -31,12 +31,12 @@ public class Player : MonoBehaviour
         myAnimator = GetComponent<Animator>();
     }
 
-
     void Update()
     {
         if (!isAlive) { return; }
         movement.Run();
-        FlipSprite();
+        movement.FlipSprite();
+        movement.horizontalInput = Input.GetAxis("Horizontal");
         movement.JumpV2();
         movement.ClimbLadder();
         if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
             mySprite.color = Color.Lerp(Color.white, Color.gray, flashSpeed);
             StartCoroutine(Die());
         }
-        movement.Shoot();
+        movement.FireBow();
     }
 
     /*
@@ -73,12 +73,12 @@ public class Player : MonoBehaviour
         FindObjectOfType<GameSession>().ProcessPlayerDeath();
     }
 
-    private void FlipSprite()
+    /*private void FlipSprite()
     {
         bool playerHasHorizotalSpeed = Mathf.Abs(myRigidBody.velocity.x) > Mathf.Epsilon; //ha a movespeed > 0 akkor true
         if (playerHasHorizotalSpeed)
         {
             transform.localScale = new Vector2(Mathf.Sign(myRigidBody.velocity.x), transform.localScale.y); //Megfordítja az x értékét, y = változatlan
         }
-    }
+    }*/
 }

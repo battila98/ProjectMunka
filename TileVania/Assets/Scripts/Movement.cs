@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Movement : MonoBehaviour
 {    
@@ -8,12 +9,19 @@ public class Movement : MonoBehaviour
 
     [SerializeField] float fallMultiplier = 1.2f;
     [SerializeField] float lowJumpMultiplier = 1f;
-    
+
+    [SerializeField] GameObject arrowPrefab;
+    [SerializeField] float arrowSpeedY = 1f;
+    [SerializeField] float arrowSpeedX = 5f;
    
     Rigidbody2D myRigidBody;
     Animator myAnimator;
     BoxCollider2D myFeet;
+
     float gravityScaleAtStart;
+    bool isFacingRight;
+    public float horizontalInput; //-1 to +1
+    float faceDirection = 1f;
 
     void Start()
     {
@@ -23,21 +31,60 @@ public class Movement : MonoBehaviour
         gravityScaleAtStart = myRigidBody.gravityScale;
     }
 
-    public void Shoot() //BUG -> Nem jön ki az animációból
+    void Update()
     {
-        bool playerShooting = true;
-        if (Input.GetButton("Fire1"))
+        if (horizontalInput > 0)
         {
-            myAnimator.SetBool("Shooting", playerShooting);
-            playerShooting = false;
-            return;
-        }           
+            faceDirection = 1f;
+        }
+        else if (horizontalInput < 0)
+        {
+            faceDirection = -1f;
+        }
+    }
+
+    public void FlipSprite()
+    {
+        /*bool playerHasHorizotalSpeed = Mathf.Abs(myRigidBody.velocity.x) > Mathf.Epsilon; //ha a movespeed > 0 akkor true
+        if (playerHasHorizotalSpeed)
+        {
+            transform.localScale = new Vector2(Mathf.Sign(myRigidBody.velocity.x), transform.localScale.y); //Megfordítja az x értékét, y = változatlan
+        }*/
+        transform.localScale = new Vector2(faceDirection, transform.localScale.y); //Megfordítja az x értékét, y = változatlan
+    }
+
+    public void FireBow() //BUG -> Nem jön ki az animációból
+    {
+        if (Input.GetButton("Fire1"))
+        {  
+            StartCoroutine(ShootArrow());           
+        }
+    }
+
+    IEnumerator ShootArrow()
+    {
+        myAnimator.SetBool("Shooting", true);
+        Vector2 startingArrowPosition = new Vector2(transform.position.x + faceDirection * 0.75f, transform.position.y); 
+        GameObject arrow = Instantiate(arrowPrefab, startingArrowPosition, Quaternion.identity)
+            as GameObject;
+        arrow.transform.localScale = new Vector2(faceDirection, transform.localScale.y);
+        arrow.GetComponent<Rigidbody2D>().velocity = new Vector2(arrowSpeedX * faceDirection, arrowSpeedY); //melyik irányba lőjön
+        yield return new WaitForSecondsRealtime(1);
+        myAnimator.SetBool("Shooting", false);
     }
 
     public void Run()
-    {
-        float controlThrow = Input.GetAxis("Horizontal"); //-1 to +1
-        Vector2 playerVelocity = new Vector2(controlThrow * runSpeed, myRigidBody.velocity.y); // a mostani sebességed y-on, az lesz a sebességed, azaz 0
+    {            
+        /*if (horizontalInput > 0)
+        {
+            isFacingRight = true;
+        }
+        else if (horizontalInput < 0)
+        {
+            isFacingRight = false;
+        }*/
+
+        Vector2 playerVelocity = new Vector2(horizontalInput * runSpeed, myRigidBody.velocity.y); // a mostani sebességed y-on, az lesz a sebességed, azaz 0
         myRigidBody.velocity = playerVelocity;
 
         //print(playerVelocity);
@@ -84,7 +131,9 @@ public class Movement : MonoBehaviour
     public void JumpV2() //Futás és jump bug (fall változók)
     {
         IsFalling();
-        if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) && !myFeet.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) && 
+            !myFeet.IsTouchingLayers(LayerMask.GetMask("Climbing")) &&
+            !myFeet.IsTouchingLayers(LayerMask.GetMask("Projectile")))
         {
             return;
         }
