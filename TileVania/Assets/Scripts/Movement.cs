@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {    
-    [SerializeField] float runSpeed = 5.5f;
+    [SerializeField] float runSpeed = 7f;
     [SerializeField] float jumpVelocity = 17.5f;
     [SerializeField] float climbSpeed = 5f;
 
-    [SerializeField] float fallMultiplier = 1.2f;
-    [SerializeField] float lowJumpMultiplier = 1f;
+    [SerializeField] float fallMultiplier = 2.26f;
+    [SerializeField] float lowJumpMultiplier = 1.8f;
 
     [SerializeField] GameObject arrowPrefab;
-    [SerializeField] float arrowSpeedY = 1f;
-    [SerializeField] float arrowSpeedX = 5f;
+    [SerializeField] float arrowSpeedY = 3.2f;
+    [SerializeField] float arrowSpeedX = 43f;
    
     Rigidbody2D myRigidBody;
     Animator myAnimator;
@@ -53,9 +53,9 @@ public class Movement : MonoBehaviour
         transform.localScale = new Vector2(faceDirection, transform.localScale.y); //Megfordítja az x értékét, y = változatlan
     }
 
-    public void FireBow() //BUG -> Nem jön ki az animációból
+    public void FireBow()
     {
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {  
             StartCoroutine(ShootArrow());           
         }
@@ -64,12 +64,13 @@ public class Movement : MonoBehaviour
     IEnumerator ShootArrow()
     {
         myAnimator.SetBool("Shooting", true);
+        yield return new WaitForSecondsRealtime(0.25f); //magic number animációhoz igazítás
         Vector2 startingArrowPosition = new Vector2(transform.position.x + faceDirection * 0.75f, transform.position.y); 
         GameObject arrow = Instantiate(arrowPrefab, startingArrowPosition, Quaternion.identity)
             as GameObject;
         arrow.transform.localScale = new Vector2(faceDirection, transform.localScale.y);
         arrow.GetComponent<Rigidbody2D>().velocity = new Vector2(arrowSpeedX * faceDirection, arrowSpeedY); //melyik irányba lőjön
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(0.25f);
         myAnimator.SetBool("Shooting", false);
     }
 
@@ -84,7 +85,7 @@ public class Movement : MonoBehaviour
             isFacingRight = false;
         }*/
 
-        Vector2 playerVelocity = new Vector2(horizontalInput * runSpeed, myRigidBody.velocity.y); // a mostani sebességed y-on, az lesz a sebességed, azaz 0
+        Vector2 playerVelocity = new Vector2(horizontalInput * runSpeed, myRigidBody.velocity.y); // a mostani sebességed y-on lesz a sebességed, azaz 0
         myRigidBody.velocity = playerVelocity;
 
         //print(playerVelocity);
@@ -100,7 +101,7 @@ public class Movement : MonoBehaviour
             myAnimator.SetBool("Climbing", false);
             return;
         }
-        if (myRigidBody.velocity.y > climbSpeed) //Tud ugrani, nem akad meg
+        if (myRigidBody.velocity.y > climbSpeed) //Tud ugrani, nem akad meg a létrában
         {
             return;
         }
@@ -121,14 +122,14 @@ public class Movement : MonoBehaviour
             myRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; //Ha nyomod, nagyot ugrik
             print("Nyomottan ugrik");
         }
-        else if (myRigidBody.velocity.y > 0 && !Input.GetButton("Jump"))
+        else if (myRigidBody.velocity.y > 0.08 && !Input.GetButton("Jump"))
         {
             myRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime; //Ha elengeded hamar az ugrást, kicsit ugrik
-            print("Simán  ugrik");
+            print("Simán ugrik");
         }
     }
 
-    public void JumpV2() //Futás és jump bug (fall változók)
+    public void JumpV2()
     {
         IsFalling();
         if (!myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) && 

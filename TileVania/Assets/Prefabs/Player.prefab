@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 436964090}
   - component: {fileID: 5883089215022997741}
   - component: {fileID: 2074217721594382317}
+  - component: {fileID: 726901746}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -199,10 +200,23 @@ MonoBehaviour:
   runSpeed: 5.5
   jumpVelocity: 17.5
   climbSpeed: 5
-  fallMultiplier: 1.2
-  lowJumpMultiplier: 1
-  arrowPrefab: {fileID: 5198168295718974448, guid: 4939ca1948e91384b8a76d53ea16fde7,
-    type: 3}
-  arrowSpeedY: 2
-  arrowSpeedX: 50
+  fallMultiplier: 2.26
+  lowJumpMultiplier: 1.8
+  arrowPrefab: {fileID: 0}
+  arrowSpeedY: 1
+  arrowSpeedX: 5
   horizontalInput: 0
+--- !u!114 &726901746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6608330597408258391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e1990acf1ffae34b8f89069ed44428f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootTimer: 0
+  timeBetweenShots: 1
