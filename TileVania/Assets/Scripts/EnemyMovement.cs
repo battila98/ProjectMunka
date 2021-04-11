@@ -9,15 +9,12 @@ public class EnemyMovement : MonoBehaviour
     Rigidbody2D myRigidBody;
     BoxCollider2D myFeet;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
         myFeet = GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (IsFacingRight())

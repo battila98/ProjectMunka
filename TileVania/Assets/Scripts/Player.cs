@@ -39,11 +39,12 @@ public class Player : MonoBehaviour
         movement.horizontalInput = Input.GetAxis("Horizontal");
         movement.JumpV2();
         movement.ClimbLadder();
-        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
+        
+        /*if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
         {
             mySprite.color = Color.Lerp(Color.white, Color.gray, flashSpeed);
-            StartCoroutine(Die());
-        }
+            //StartCoroutine(Die());
+        }*/
         //movement.FireBow();
     }
 
@@ -63,14 +64,27 @@ public class Player : MonoBehaviour
         }    
     }
     */
-
-    IEnumerator Die()
+    public IEnumerator Die()
     {
         myAnimator.SetTrigger("Dying");
         GetComponent<Rigidbody2D>().velocity = deathKick;
         isAlive = false;
         yield return new WaitForSecondsRealtime(waitForRespawn);
-        FindObjectOfType<GameSession>().ProcessPlayerDeath();
+        //FindObjectOfType<GameSession>().ProcessPlayerDamage();
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        /*if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+        {
+            FindObjectOfType<GameSession>().ProcessPlayerDamage(10);
+            GetComponent<Rigidbody2D>().velocity = deathKick;
+        }*/
+        if (collision.gameObject.layer == 13 || collision.gameObject.layer == 12) 
+        {
+            FindObjectOfType<GameSession>().ProcessPlayerDamage(10);
+            GetComponent<Rigidbody2D>().velocity = deathKick;
+        }
     }
 
     /*private void FlipSprite()

@@ -68,6 +68,7 @@ public class Movement : MonoBehaviour
         Vector2 startingArrowPosition = new Vector2(transform.position.x + faceDirection * 0.75f, transform.position.y); 
         GameObject arrow = Instantiate(arrowPrefab, startingArrowPosition, Quaternion.identity)
             as GameObject;
+        arrow.name = "Arrow";
         arrow.transform.localScale = new Vector2(faceDirection, transform.localScale.y);
         arrow.GetComponent<Rigidbody2D>().velocity = new Vector2(arrowSpeedX * faceDirection, arrowSpeedY); //melyik irányba lőjön
         yield return new WaitForSecondsRealtime(0.25f);

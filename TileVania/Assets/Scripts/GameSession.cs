@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -8,11 +7,9 @@ using System.IO;
 
 public class GameSession : MonoBehaviour
 {
-    [SerializeField] int playerLives = 3;
-    [SerializeField] int score = 0;
-
-    [SerializeField] Text livesText;
-    [SerializeField] Text scoreText;
+    public int playerLives = 3;
+    public int score = 0;
+    public int health = 100;
 
     string path = Environment.CurrentDirectory + "/Assets/Saves/";
     private Stats stats;
@@ -36,13 +33,12 @@ public class GameSession : MonoBehaviour
         //print(Environment.CurrentDirectory);
         //ReadSaves();
 
+        
         stats = new Stats
         {
             PlayerName = "Név"
         };
         WriteSaves();
-        livesText.text = playerLives.ToString();
-        scoreText.text = score.ToString();
     }
 
     private void ReadSaves()
@@ -57,13 +53,16 @@ public class GameSession : MonoBehaviour
         File.WriteAllText(path + "achivements.json", JsonConvert.SerializeObject(achivements));
     }
 
-    public void ProcessPlayerDeath()
+    public void ProcessPlayerDamage(int damageAmount)
     {
-        if (playerLives > 1)
+        health -= damageAmount;
+        if (health <= 0)
         {
             TakeLife();
+            StartCoroutine(FindObjectOfType<Player>().Die());
+            health = 100;
         }
-        else
+        if (playerLives <= 0)
         {
             ResetGameSession();
         }
@@ -72,7 +71,7 @@ public class GameSession : MonoBehaviour
     public void AddToScore(int pointsToAdd) // updateled és adj hozzá a pontokhoz
     {
         score += pointsToAdd;
-        scoreText.text = score.ToString();
+        //scoreText.text = score.ToString();
     }
 
     private void TakeLife()
@@ -80,7 +79,7 @@ public class GameSession : MonoBehaviour
         playerLives--;
         var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
-        livesText.text = playerLives.ToString();
+        //livesText.text = playerLives.ToString();
     }
 
     private void ResetGameSession() // Ha az össze élet elfogy, vissza az elejére és singelton meghal (game és élet reset)
