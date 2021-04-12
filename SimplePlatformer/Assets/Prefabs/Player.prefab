@@ -202,9 +202,10 @@ MonoBehaviour:
   climbSpeed: 5
   fallMultiplier: 2.26
   lowJumpMultiplier: 1.8
-  arrowPrefab: {fileID: 0}
-  arrowSpeedY: 1
-  arrowSpeedX: 5
+  arrowPrefab: {fileID: 5198168295718974448, guid: 4939ca1948e91384b8a76d53ea16fde7,
+    type: 3}
+  arrowSpeedY: 3
+  arrowSpeedX: 43
   horizontalInput: 0
 --- !u!114 &726901746
 MonoBehaviour:

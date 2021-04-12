@@ -2,17 +2,17 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-/TileVania/[Ll]ibrary/
-/TileVania/[Tt]emp/
-/TileVania/[Oo]bj/
-/TileVania/[Bb]uild/
-/TileVania/[Bb]uilds/
-/TileVania/[Ll]ogs/
-/TileVania/[Mm]emoryCaptures/
-/TileVania/[Aa]ssets/SPA/
+/SimplePlatformer/[Ll]ibrary/
+/SimplePlatformer/[Tt]emp/
+/SimplePlatformer/[Oo]bj/
+/SimplePlatformer/[Bb]uild/
+/SimplePlatformer/[Bb]uilds/
+/SimplePlatformer/[Ll]ogs/
+/SimplePlatformer/[Mm]emoryCaptures/
+/SimplePlatformer/[Aa]ssets/SPA/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
-/TileVania/[Aa]ssets/**/*.meta
+/SimplePlatformer/[Aa]ssets/**/*.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
