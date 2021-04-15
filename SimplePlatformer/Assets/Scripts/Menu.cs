@@ -7,14 +7,20 @@ public class Menu : MonoBehaviour
 {
     public void StartFirstLevel()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
     public void LoadMainMenu()
     {    
         SceneManager.LoadScene(0);
     }
-
-
+    public void LoadSettings()
+    {
+        SceneManager.LoadScene(1);
+    }
+    public void QuitGame()
+    {
+        QuitGame();
+    }
 
 }

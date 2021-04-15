@@ -73,6 +73,7 @@ public class Movement : MonoBehaviour
         arrow.GetComponent<Rigidbody2D>().velocity = new Vector2(arrowSpeedX * faceDirection, arrowSpeedY); //melyik irányba lőjön
         yield return new WaitForSecondsRealtime(0.25f);
         myAnimator.SetBool("Shooting", false);
+        //Destroy(arrow); //after 3 secs De hol legyen a timer? Arrow.cs vagy Movement.cs? 
     }
 
     public void Run()
