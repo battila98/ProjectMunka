@@ -16,11 +16,17 @@ public class Arrow : MonoBehaviour
     }
     void Update()
     {
-        arrowTimer += Time.deltaTime;
-        if (/*Arrow Instentiate*/ && arrowTimer > arrowDestroyTimer)
+        StartCoroutine(DestroyArrow());
+        /*arrowTimer += Time.deltaTime;
+        if (Arrow Instentiate && arrowTimer > arrowDestroyTimer)
         {
             Destroy(gameObject);
             arrowTimer = 0f;
-        }
+        }*/
+    }
+    IEnumerator DestroyArrow()
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(gameObject);
     }
 }

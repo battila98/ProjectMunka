@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2994538877164643841}
   - component: {fileID: 6709968834407860220}
   - component: {fileID: 4641449890548225783}
-  m_Layer: 14
+  - component: {fileID: 1713915970}
+  m_Layer: 16
   m_Name: Mushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,3 +121,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0b5c23b4840ee4487e3e2c34ae0be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1713915970
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941540717321998382}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 42a249da48d28bf45bd243ae0e0e62ac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

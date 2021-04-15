@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {    
@@ -17,9 +18,10 @@ public class Movement : MonoBehaviour
     Rigidbody2D myRigidBody;
     Animator myAnimator;
     BoxCollider2D myFeet;
+    UnityEvent OnArrowShot;
 
     float gravityScaleAtStart;
-    bool isFacingRight;
+    //bool isFacingRight;
     public float horizontalInput; //-1 to +1
     float faceDirection = 1f;
 
@@ -29,6 +31,7 @@ public class Movement : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myFeet = GetComponent<BoxCollider2D>();
         gravityScaleAtStart = myRigidBody.gravityScale;
+        OnArrowShot = FindObjectOfType<StatsHandler>().OnArrowShot;
     }
 
     void Update()
@@ -59,6 +62,7 @@ public class Movement : MonoBehaviour
         {  
             StartCoroutine(ShootArrow());           
         }
+        OnArrowShot.Invoke();
     }
 
     IEnumerator ShootArrow()
@@ -73,7 +77,6 @@ public class Movement : MonoBehaviour
         arrow.GetComponent<Rigidbody2D>().velocity = new Vector2(arrowSpeedX * faceDirection, arrowSpeedY); //melyik irányba lőjön
         yield return new WaitForSecondsRealtime(0.25f);
         myAnimator.SetBool("Shooting", false);
-        //Destroy(arrow); //after 3 secs De hol legyen a timer? Arrow.cs vagy Movement.cs? 
     }
 
     public void Run()
@@ -122,12 +125,12 @@ public class Movement : MonoBehaviour
         if (myRigidBody.velocity.y < 0)
         {
             myRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime; //Ha nyomod, nagyot ugrik
-            print("Nyomottan ugrik");
+            //print("Nyomottan ugrik");
         }
         else if (myRigidBody.velocity.y > 0.08 && !Input.GetButton("Jump"))
         {
             myRigidBody.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime; //Ha elengeded hamar az ugrást, kicsit ugrik
-            print("Simán ugrik");
+            //print("Simán ugrik");
         }
     }
 
@@ -144,6 +147,14 @@ public class Movement : MonoBehaviour
         {
             myRigidBody.velocity = Vector2.up * jumpVelocity;
         }     
+    }
+    
+    public void Catapulted()
+    {
+        if (myFeet.IsTouchingLayers(LayerMask.GetMask("Bouncy")))
+        {
+            StartCoroutine(FindObjectOfType<Bouncy>().PushUp());
+        }
     }
 
 }

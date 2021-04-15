@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
     // Config  
     [SerializeField] float waitForRespawn = 0.8f;
-    [SerializeField] Vector2 deathKick = new Vector2(0f, 15f);
+    [SerializeField] Vector2 KnockUp = new Vector2(0f, 15f);
 
     [SerializeField] AudioClip jumpSFX;
 
@@ -15,11 +16,13 @@ public class Player : MonoBehaviour
 
     // Cashed comp. refs.
     Rigidbody2D myRigidBody;
-    Animator myAnimator;
+    public Animator myAnimator;
     CapsuleCollider2D myBodyCollider;
-    float flashSpeed = 0.3f;
     SpriteRenderer mySprite;
     Movement movement;
+    UnityEvent OnHealthLost;
+
+    //float flashSpeed = 0.3f;
     // Message then methods
 
     void Start()
@@ -29,6 +32,7 @@ public class Player : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
         mySprite = GetComponent<SpriteRenderer>();
         myAnimator = GetComponent<Animator>();
+        OnHealthLost = FindObjectOfType<StatsHandler>().OnHealthLost;
     }
 
     void Update()
@@ -39,7 +43,8 @@ public class Player : MonoBehaviour
         movement.horizontalInput = Input.GetAxis("Horizontal");
         movement.JumpV2();
         movement.ClimbLadder();
-        
+        movement.Catapulted();
+
         /*if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards")))
         {
             mySprite.color = Color.Lerp(Color.white, Color.gray, flashSpeed);
@@ -67,7 +72,7 @@ public class Player : MonoBehaviour
     public IEnumerator Die()
     {
         myAnimator.SetTrigger("Dying");
-        GetComponent<Rigidbody2D>().velocity = deathKick;
+        GetComponent<Rigidbody2D>().velocity = KnockUp;
         isAlive = false;
         yield return new WaitForSecondsRealtime(waitForRespawn);
         //FindObjectOfType<GameSession>().ProcessPlayerDamage();
@@ -83,7 +88,8 @@ public class Player : MonoBehaviour
         if (collision.gameObject.layer == 13 || collision.gameObject.layer == 12) 
         {
             FindObjectOfType<GameSession>().ProcessPlayerDamage(10);
-            GetComponent<Rigidbody2D>().velocity = deathKick;
+            OnHealthLost.Invoke();
+            GetComponent<Rigidbody2D>().velocity = KnockUp;
         }
     }
 
