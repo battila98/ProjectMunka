@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         mySprite = GetComponent<SpriteRenderer>();
         myAnimator = GetComponent<Animator>();
         OnHealthLost = FindObjectOfType<StatsHandler>().OnHealthLost;
+        print(OnHealthLost.ToString());
     }
 
     void Update()

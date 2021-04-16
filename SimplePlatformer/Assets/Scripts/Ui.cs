@@ -13,6 +13,10 @@ public class Ui : MonoBehaviour
 
     void Update()
     {
+        if (gameSession == null)
+        {
+            gameSession = FindObjectOfType<GameSession>();
+        }
         livesText.text = gameSession.playerLives.ToString();
         healthText.text = gameSession.health.ToString();
         scoreText.text = gameSession.score.ToString();

@@ -1,6 +1,6 @@
 ﻿public class Stats
 {
-    public string PlayerName { get; set; }
+    //public string PlayerName { get; set; }
     public int EnemiesKilled { get; set; }
     public int PlayerDeaths { get; set; }
     public int HealthLost { get; set; }

@@ -12,7 +12,7 @@ public class GameSession : MonoBehaviour
     public int score = 0;
     public int health = 100;
 
-    UnityEvent OnPlayerDeath;
+    UnityEvent OnPlayerKilled;
 
     //string path = Environment.CurrentDirectory + "/Assets/Saves/";
     //private Stats stats;
@@ -39,7 +39,7 @@ public class GameSession : MonoBehaviour
 
     private void Start()
     {
-        OnPlayerDeath = FindObjectOfType<StatsHandler>().OnPlayerKilled;
+        OnPlayerKilled = FindObjectOfType<StatsHandler>().OnPlayerKilled;
         //print(Environment.CurrentDirectory);
         //ReadSaves();
 
@@ -97,7 +97,7 @@ public class GameSession : MonoBehaviour
     private void TakeLife()
     {
         playerLives--;
-        OnPlayerDeath.Invoke();
+        OnPlayerKilled.Invoke();
         var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
         //livesText.text = playerLives.ToString();

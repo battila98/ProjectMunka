@@ -16,33 +16,42 @@ public class StatsHandler : MonoBehaviour
 
     Stats stats;
     string path = Environment.CurrentDirectory + "/Assets/Saves/";
+
     private void Awake()
-    {
-        ReadSaves();
-    }
-    private void Start()
     {
         OnEnemyKilled.AddListener(() => stats.EnemiesKilled++);
         OnPlayerKilled.AddListener(() => stats.PlayerDeaths++);
         OnArrowShot.AddListener(() => stats.ArrowsShot++);
-        OnHealthLost.AddListener(() => stats.HealthLost+=10);
+        OnHealthLost.AddListener(() => stats.HealthLost += 10);
         OnJump.AddListener(() => stats.Jumps++);
+
+        ReadSaves();
+    }
+    private void Start()
+    {
+       
     }
 
     private void ReadSaves()
     {
-        stats = JsonConvert.DeserializeObject<Stats>(path + "stats.json"); //beolvas
+        stats = JsonConvert.DeserializeObject<Stats>(File.ReadAllText(path + "stats.json")); //beolvas
         //achivements = JsonConvert.DeserializeObject<List<Achivement>>(path + "achivements.json");
     }
 
     private void WriteSaves()
     {
-        File.WriteAllText(path + "stats.json", JsonConvert.SerializeObject(stats));
+        //stats = new Stats(); //hacks
+        if (stats != null)
+        {
+            File.WriteAllText(path + "stats.json", JsonConvert.SerializeObject(stats));
+        }
         //File.WriteAllText(path + "achivements.json", JsonConvert.SerializeObject(achivements));
     }
 
     private void OnApplicationQuit()
     {
         WriteSaves();
+        print("QUIT!");
+        print(stats.ArrowsShot + ";" + stats.PlayerDeaths + ";" + stats.HealthLost + ";" + stats.EnemiesKilled);
     }
 }
