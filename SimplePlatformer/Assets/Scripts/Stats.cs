@@ -6,5 +6,6 @@
     public int HealthLost { get; set; }
     public int ArrowsShot { get; set; }
     public int Jumps { get; set; }
+    public int Score { get; set; }
 }
 

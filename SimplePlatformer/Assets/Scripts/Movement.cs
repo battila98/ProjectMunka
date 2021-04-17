@@ -19,6 +19,7 @@ public class Movement : MonoBehaviour
     Animator myAnimator;
     BoxCollider2D myFeet;
     UnityEvent OnArrowShot;
+    UnityEvent OnJump;
 
     float gravityScaleAtStart;
     //bool isFacingRight;
@@ -32,6 +33,7 @@ public class Movement : MonoBehaviour
         myFeet = GetComponent<BoxCollider2D>();
         gravityScaleAtStart = myRigidBody.gravityScale;
         OnArrowShot = FindObjectOfType<StatsHandler>().OnArrowShot;
+        OnJump = FindObjectOfType<StatsHandler>().OnJump;
     }
 
     void Update()
@@ -146,7 +148,8 @@ public class Movement : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             myRigidBody.velocity = Vector2.up * jumpVelocity;
-        }     
+            OnJump.Invoke();
+        }       
     }
     
     public void Catapulted()

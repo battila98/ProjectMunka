@@ -13,6 +13,7 @@ public class StatsHandler : MonoBehaviour
     public readonly UnityEvent OnArrowShot = new UnityEvent();
     public readonly UnityEvent OnHealthLost = new UnityEvent();
     public readonly UnityEvent OnJump = new UnityEvent();
+    public readonly UnityEvent OnScoreGain = new UnityEvent();
 
     Stats stats;
     string path = Environment.CurrentDirectory + "/Assets/Saves/";
@@ -24,6 +25,7 @@ public class StatsHandler : MonoBehaviour
         OnArrowShot.AddListener(() => stats.ArrowsShot++);
         OnHealthLost.AddListener(() => stats.HealthLost += 10);
         OnJump.AddListener(() => stats.Jumps++);
+        OnScoreGain.AddListener(() => stats.Score += 100);
 
         ReadSaves();
     }

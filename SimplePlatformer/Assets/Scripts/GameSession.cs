@@ -13,6 +13,7 @@ public class GameSession : MonoBehaviour
     public int health = 100;
 
     UnityEvent OnPlayerKilled;
+    UnityEvent OnScoreGain;
 
     //string path = Environment.CurrentDirectory + "/Assets/Saves/";
     //private Stats stats;
@@ -40,6 +41,7 @@ public class GameSession : MonoBehaviour
     private void Start()
     {
         OnPlayerKilled = FindObjectOfType<StatsHandler>().OnPlayerKilled;
+        OnScoreGain = FindObjectOfType<StatsHandler>().OnScoreGain;
         //print(Environment.CurrentDirectory);
         //ReadSaves();
 
@@ -79,6 +81,7 @@ public class GameSession : MonoBehaviour
     public void AddToScore(int pointsToAdd) // updateled és adj hozzá a pontokhoz
     {
         score += pointsToAdd;
+        OnScoreGain.Invoke();
         //scoreText.text = score.ToString();
     }
 
