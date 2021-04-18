@@ -6,19 +6,18 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     // Config  
-    [SerializeField] float waitForRespawn = 0.8f;
     [SerializeField] Vector2 KnockUp = new Vector2(0f, 15f);
-
+    
     [SerializeField] AudioClip jumpSFX;
 
     // State
     bool isAlive = true;
 
-    // Cashed comp. refs.
-    Rigidbody2D myRigidBody;
+    //Cashed comp. refs.
+    //Rigidbody2D myRigidBody;
     public Animator myAnimator;
-    CapsuleCollider2D myBodyCollider;
-    SpriteRenderer mySprite;
+    //CapsuleCollider2D myBodyCollider;
+    //SpriteRenderer mySprite;
     Movement movement;
     UnityEvent OnHealthLost;
 
@@ -28,12 +27,13 @@ public class Player : MonoBehaviour
     void Start()
     {
         movement = GetComponent<Movement>();
-        myBodyCollider = GetComponent<CapsuleCollider2D>();
+        /*myBodyCollider = GetComponent<CapsuleCollider2D>();
         myRigidBody = GetComponent<Rigidbody2D>();
-        mySprite = GetComponent<SpriteRenderer>();
+        mySprite = GetComponent<SpriteRenderer>();*/
         myAnimator = GetComponent<Animator>();
-        OnHealthLost = FindObjectOfType<StatsHandler>().OnHealthLost;
-        print(OnHealthLost.ToString());
+        //OnHealthLost = FindObjectOfType<StatsHandler>().OnHealthLost;
+        OnHealthLost = StatsHandler.Instance.OnHealthLost;
+        //print(OnHealthLost.ToString());
     }
 
     void Update()
@@ -70,12 +70,11 @@ public class Player : MonoBehaviour
         }    
     }
     */
-    public IEnumerator Die()
+    public void Die()
     {
         myAnimator.SetTrigger("Dying");
         GetComponent<Rigidbody2D>().velocity = KnockUp;
         isAlive = false;
-        yield return new WaitForSecondsRealtime(waitForRespawn);
         //FindObjectOfType<GameSession>().ProcessPlayerDamage();
     }
 

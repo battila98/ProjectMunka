@@ -7,7 +7,8 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        OnEnemyKilled = FindObjectOfType<StatsHandler>().OnEnemyKilled; // érték adás
+        //OnEnemyKilled = FindObjectOfType<StatsHandler>().OnEnemyKilled; // érték adás
+        OnEnemyKilled = StatsHandler.Instance.OnEnemyKilled;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {

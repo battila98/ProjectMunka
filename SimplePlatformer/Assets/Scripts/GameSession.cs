@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -11,6 +12,8 @@ public class GameSession : MonoBehaviour
     public int playerLives = 3;
     public int score = 0;
     public int health = 100;
+    [SerializeField] float waitForRespawn = 0.5f;
+    //public int startingScore;
 
     UnityEvent OnPlayerKilled;
     UnityEvent OnScoreGain;
@@ -40,8 +43,10 @@ public class GameSession : MonoBehaviour
 
     private void Start()
     {
-        OnPlayerKilled = FindObjectOfType<StatsHandler>().OnPlayerKilled;
-        OnScoreGain = FindObjectOfType<StatsHandler>().OnScoreGain;
+        //OnPlayerKilled = FindObjectOfType<StatsHandler>().OnPlayerKilled;
+        //OnScoreGain = FindObjectOfType<StatsHandler>().OnScoreGain;
+        OnPlayerKilled = StatsHandler.Instance.OnPlayerKilled;
+        OnScoreGain = StatsHandler.Instance.OnScoreGain;
         //print(Environment.CurrentDirectory);
         //ReadSaves();
 
@@ -68,14 +73,11 @@ public class GameSession : MonoBehaviour
         health -= damageAmount;
         if (health <= 0)
         {
-            TakeLife();
-            StartCoroutine(FindObjectOfType<Player>().Die());
+            FindObjectOfType<Player>().Die();
+            StartCoroutine(TakeLife());
             health = 100;
         }
-        if (playerLives <= 0)
-        {
-            ResetGameSession();
-        }
+        
     }
 
     public void AddToScore(int pointsToAdd) // updateled és adj hozzá a pontokhoz
@@ -97,12 +99,21 @@ public class GameSession : MonoBehaviour
         }
     }
 
-    private void TakeLife()
+    IEnumerator TakeLife()
     {
+        yield return new WaitForSecondsRealtime(waitForRespawn);
         playerLives--;
         OnPlayerKilled.Invoke();
-        var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex);
+        if (playerLives < 0)
+        {
+            ResetGameSession();
+        }
+        else
+        {
+            var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentSceneIndex);
+        }
+        //score = startingScore;
         //livesText.text = playerLives.ToString();
     }
 
@@ -111,5 +122,4 @@ public class GameSession : MonoBehaviour
         SceneManager.LoadScene(0);
         Destroy(gameObject); 
     }
-
 }

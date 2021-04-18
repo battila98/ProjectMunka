@@ -7,14 +7,12 @@ public class Movement : MonoBehaviour
     [SerializeField] float runSpeed = 7f;
     [SerializeField] float jumpVelocity = 17.5f;
     [SerializeField] float climbSpeed = 5f;
-
     [SerializeField] float fallMultiplier = 2.26f;
     [SerializeField] float lowJumpMultiplier = 1.8f;
-
     [SerializeField] GameObject arrowPrefab;
     [SerializeField] float arrowSpeedY = 3.2f;
     [SerializeField] float arrowSpeedX = 43f;
-   
+    
     Rigidbody2D myRigidBody;
     Animator myAnimator;
     BoxCollider2D myFeet;
@@ -32,10 +30,12 @@ public class Movement : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myFeet = GetComponent<BoxCollider2D>();
         gravityScaleAtStart = myRigidBody.gravityScale;
-        OnArrowShot = FindObjectOfType<StatsHandler>().OnArrowShot;
-        OnJump = FindObjectOfType<StatsHandler>().OnJump;
-    }
+        //OnArrowShot = FindObjectOfType<StatsHandler>().OnArrowShot;
+        //OnJump = FindObjectOfType<StatsHandler>().OnJump;
+        OnArrowShot = StatsHandler.Instance.OnArrowShot;
+        OnJump = StatsHandler.Instance.OnJump;
 
+    }
     void Update()
     {
         if (horizontalInput > 0)
@@ -63,8 +63,8 @@ public class Movement : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {  
             StartCoroutine(ShootArrow());           
+            OnArrowShot.Invoke();
         }
-        OnArrowShot.Invoke();
     }
 
     IEnumerator ShootArrow()
@@ -159,5 +159,4 @@ public class Movement : MonoBehaviour
             StartCoroutine(FindObjectOfType<Bouncy>().PushUp());
         }
     }
-
 }

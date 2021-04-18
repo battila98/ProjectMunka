@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class ScenePersist : MonoBehaviour
 {
-    //int startingSceneIndex;
-    List<GameObject> objectsToReset = new List<GameObject>();
-    UnityEvent OnPlayerKilled;
+    int startingSceneIndex;
+    /*List<GameObject> objectsToReset = new List<GameObject>();
+    UnityEvent OnPlayerKilled;*/
 
-    /*private void Awake()
+    private void Awake()
     {
         int numScenePersist = FindObjectsOfType<ScenePersist>().Length;
         if (numScenePersist > 1)
@@ -19,13 +19,13 @@ public class ScenePersist : MonoBehaviour
         }
         
             DontDestroyOnLoad(gameObject);
-    }*/
+    }
 
     void Start()
     {
         //print("Start");
         //startingSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        foreach (var enemy in FindObjectsOfType<Enemy>())
+        /*foreach (var enemy in FindObjectsOfType<Enemy>())
         {
             objectsToReset.Add(enemy.gameObject);
         }
@@ -37,31 +37,31 @@ public class ScenePersist : MonoBehaviour
             objectsToReset.Add(water);
         }
 
-        OnPlayerKilled = FindObjectOfType<StatsHandler>().OnPlayerKilled;
-        OnPlayerKilled.AddListener(() => LevelReset());
+        OnPlayerKilled = FindObjectOfType<StatsHandler>().OnPlayerKilled;*/
+        //OnPlayerKilled.AddListener(() => LevelReset());
     }
 
-    void LevelReset()
+    /*void LevelReset()
     {
         /*var water = FindObjectOfType<VerticalScroll>().gameObject;
         if (water != null) //ha van
         {
             
-        }*/
+        }
 
         foreach (var go in objectsToReset)
         {
             Destroy(go);
             Instantiate(go);
         }
-    }
+    }*/
 
     void Update()
     {
-        /*int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         if (currentSceneIndex != startingSceneIndex)
         {
             Destroy(gameObject);
-        }*/
+        }
     }
 }
