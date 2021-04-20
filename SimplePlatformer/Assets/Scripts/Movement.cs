@@ -10,7 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float fallMultiplier = 2.26f;
     [SerializeField] float lowJumpMultiplier = 1.8f;
     [SerializeField] GameObject arrowPrefab;
-    [SerializeField] float arrowSpeedY = 3.2f;
+    [SerializeField] float arrowSpeedY = 0.05f;
     [SerializeField] float arrowSpeedX = 43f;
     
     Rigidbody2D myRigidBody;
@@ -71,7 +71,7 @@ public class Movement : MonoBehaviour
     {
         myAnimator.SetBool("Shooting", true);
         yield return new WaitForSecondsRealtime(0.25f); //magic number animációhoz igazítás
-        Vector2 startingArrowPosition = new Vector2(transform.position.x + faceDirection * 0.75f, transform.position.y); 
+        Vector2 startingArrowPosition = new Vector2(transform.position.x + faceDirection * 0.75f, transform.position.y - 0.2f); 
         GameObject arrow = Instantiate(arrowPrefab, startingArrowPosition, Quaternion.identity)
             as GameObject;
         arrow.name = "Arrow";
@@ -112,8 +112,8 @@ public class Movement : MonoBehaviour
         {
             return;
         }
-        float controlThrow = Input.GetAxis("Vertical");
-        Vector2 climbVelocity = new Vector2(myRigidBody.velocity.x, controlThrow * climbSpeed);
+        float climbingDirection = Input.GetAxis("Vertical");
+        Vector2 climbVelocity = new Vector2(myRigidBody.velocity.x, climbingDirection * climbSpeed);
         myRigidBody.velocity = climbVelocity;
         myRigidBody.gravityScale = 0f;
 

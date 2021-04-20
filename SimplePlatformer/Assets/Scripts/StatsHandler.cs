@@ -33,8 +33,12 @@ public class StatsHandler
     string path;
 
     private StatsHandler() //konstructor ami singelton
-    {        
-        path = Environment.CurrentDirectory + "/Assets/Resources/";
+    {
+
+        //path = Environment.CurrentDirectory + "/Assets/Resources/";
+
+        path = Environment.CurrentDirectory + @"\SimplePlatformer_Data\Resources\";
+
         //path = Application.dataPath + "/Resources/";
 
         //OnPlayerKilled.AddListener(OnPlayerKilled);
